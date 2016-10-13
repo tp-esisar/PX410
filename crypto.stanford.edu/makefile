@@ -6,7 +6,9 @@ url:
 
 get-element :
 	gcc findbase.c -o findbase
+	gcc -fno-stack-protector victim.c -o victim 
 	./get-element.sh
+
 
 victim: victim.c
 	gcc -fno-stack-protector -o victim victim.c
@@ -19,3 +21,4 @@ exploit-victim: victim shellcode
 
 clear:
 	rm -f shell shellcode victim findbase
+
