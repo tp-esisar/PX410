@@ -23,8 +23,19 @@ victim: victim.c
 run-victim: victim
 	setarch `arch` -R ./victim
 
-exploit-victim: victim shellcode
+exploit-victim: victim shellcode exploit.sh
 	./exploit.sh ${ADR}
 
+pipe:
+	rm -f pip
+	mkfifo pip
+
+run-victim-aslr: victim pipe
+	cat pip | ./victim
+	rm -f pip
+
+exploit-victim-aslr: victim shellcode pip
+	./exploit-aslr.sh
+
 clear:
-	rm -f shell shellcode victim
+	rm -f shell shellcode victim pip
