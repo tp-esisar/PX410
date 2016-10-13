@@ -1,24 +1,15 @@
 
-
+lib=/lib/x86_64-linux-gnu/libc.so.6
 
 url:
 	firefox http://crypto.stanford.edu/~blynn/rop/ &
 
-shell: shell.c
-	gcc shell.c -o shell
-
-run-shell: shell
-	./shell
-
-objdump-shell: shell
-	objdump -d shell | sed -n '/needle0/,/needle1/p'
-
-shellcode: shell
-	xxd -s0x4ba -l32 -p shell shellcode
+get-element :
+	gcc findbase.c -o findbase
+	./get-element.sh
 
 victim: victim.c
 	gcc -fno-stack-protector -o victim victim.c
-	execstack -s victim
 
 run-victim: victim
 	setarch `arch` -R ./victim
@@ -27,4 +18,4 @@ exploit-victim: victim shellcode
 	./exploit.sh ${ADR}
 
 clear:
-	rm -f shell shellcode victim
+	rm -f shell shellcode victim findbase
